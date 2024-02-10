@@ -7,14 +7,14 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: false }));   //middleware 
 
-const users=[
+const users=[  //user/admin part(haven't really done much here)
     {username:'user', password:'password', role:'user'},
     {username:'admin', password:'adminpassword', role:'admin'},
 ];
 
-app.post('/login', (req,res)=>{
+app.post('/login', (req,res)=>{  //login/signup
     const { username, password } = req.body;
     const user = users.find(u => u.username === username && u.password === password);
     if (user) {
@@ -25,7 +25,7 @@ app.post('/login', (req,res)=>{
     }
 });
 
-app.get('/reels', (req, res) => {
+app.get('/reels', (req, res) => {   //different screens for user and admin
     const user = req.session.user;
     if (!user) {
         res.redirect('/login');
@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
     res.render('index', { reels: [], result: { message: '' }, balance });
 });
 
-app.post('/deposit', (req, res) => {
+app.post('/deposit', (req, res) => {  //depositing money 
     const amount = parseInt(req.body.amount);
     if (!isNaN(amount) && amount > 0) {
         balance += amount; 
