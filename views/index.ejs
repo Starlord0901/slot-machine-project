@@ -8,11 +8,11 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container">  //declaring global container
         <h1>Slot Machine</h1>
         <div class="reels-container">
 
-            <div class="reels">
+            <div class="reels">  //indv reels
                 <% reels.forEach(reel => { %>
                     <div class="reel"><%= reel %></div>
                 <% }); %>
@@ -31,13 +31,14 @@
             </div>
 
         </div>
-        <p class="result"><%= result.message %></p>
+        <p class="result"><%= result.message %></p>  //results message
         <form action="/deposit" method="post">
             <label for="amount">Deposit Amount:</label>
             <input type="number" id="amount" name="amount" required>
             <button type="submit">Deposit</button>
         </form>
-        <p class="curBal">Current Balance: <%= balance %></p>
+
+        <p class="curBal">Current Balance: <%= balance %></p>  //balance message 
         <a href="/">Spin Again</a>
     </div>
     
