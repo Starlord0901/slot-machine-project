@@ -1,0 +1,77 @@
+ <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Slot Machine</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <script src="../server"></script>
+        <script src="spin.js"></script>
+    
+
+        <div class="container">
+            <h1>Slot Machine</h1>
+            <div class="reels-container">
+
+                <div class="reels">
+                    <% reels.forEach(reel => { %>
+                        <div class="reel"><%= reel %></div>
+                    <% }); %>
+                </div>  
+
+                <div class="reels">
+                    <% reels.forEach(reel => { %>
+                        <div class="reel"><%= reel %></div>
+                    <% }); %>
+                </div>
+
+                <div class="reels">
+                    <% reels.forEach(reel => { %>
+                        <div class="reel" "><%= reel %></div>
+                    <% }); %>
+                </div> 
+
+             </div>
+            
+            <form id="deposit-form" action="/deposit" method="post">
+                <label for="amount">Deposit Amount:</label>
+                <input type="number" id="amount" name="amount" required>
+                <button type="submit" id="deposit-button">Deposit</button>
+            </form>
+            <p class="balance">Current Balance: </p>
+            <a href="/">Spin Again</a>
+        </div>
+        <a href="/logout" class="logout">Logout</a>
+        
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#spin-button').click(function() {
+    $('.reel').each(function() {
+     
+      $(this).effect('spin', {
+        duration: 1000,
+        callback: function() {
+          
+          $.ajax({
+            url: '/api/symbol', 
+            success: function(newSymbol) {
+              $(this).html(newSymbol);
+            }
+          });
+        }
+      });
+    });
+  });
+});
+</script>
+
+        
+    </body>
+    </html> 
+
+ 
+
+    
