@@ -1,0 +1,65 @@
+
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcrypt');
+const User = require('../model/user');
+
+
+router.get('/signup', (req, res) => {
+    res.render('signup');
+});
+
+router.post('/signup', async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const newUser = new User({
+            username: req.body.username,
+            password: hashedPassword
+        });
+        await newUser.save();
+        console.log("Account saved in mongodb");
+        req.flash('success', 'Account created successfully');
+        res.redirect('/login');
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'An error occurred');
+        res.redirect('/signup');
+    }
+});
+
+module.exports=function(reels){
+    router.get('/reels',(req,res)=>{
+        res.json({reels:reels});
+    });
+    return router;
+};
+
+const reels=["A","B","C","D","E","F"]
+
+router.get('/login', (req, res) => {
+    res.render('login',{reels:reels});
+
+});
+
+
+
+router.post('/login', async (req, res) => {
+    console.log("HEllo in login")
+    const { username, password } = req.body;
+    console.log(username,password)
+    const user = await User.findOne({ username: username });
+    console.log(user)
+    const match = await bcrypt.compare(password, user.password);
+    console.log("Okay here, ", match)
+    if (user && match) {
+        console.log("now success")
+        req.flash('success', 'Logged in successfully');
+        res.redirect('/');
+    } else {
+        console.log("Failure")
+        req.flash('error', 'Invalid username or password');
+        res.redirect('/login');
+    }
+});
+
+module.exports = router;

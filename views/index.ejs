@@ -1,0 +1,88 @@
+ <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Slot Machine</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <script src="../server"></script>
+        <script src="spin.js"></script>
+    
+
+        <div class="container">
+            <h1>Slot Machine</h1>
+            <div class="reels-container">
+
+                <div class="reels">
+                 
+                    <% symbols.forEach((symbol, index) => { %>
+                      <% if (visibleIndex === index) { %>
+                        <div class="reel"><%= symbol %></div>
+                      <% } %>
+                    <% }); %>
+                </div>  
+
+                <div class="reels">
+                 
+                    <% symbols.forEach((symbol, index) => { %>
+                      <% if (visibleIndex === index) { %>
+                        <div class="reel"><%= symbol %></div>
+                      <% } %>
+                    <% }); %>
+                </div>  
+
+                <div class="reels">
+                 
+                    <% symbols.forEach((symbol, index) => { %>
+                      <% if (visibleIndex === index) { %>
+                        <div class="reel"><%= symbol %></div>
+                      <% } %>
+                    <% }); %>
+                </div>  
+
+             </div>
+            
+            <form id="deposit-form" action="/deposit" method="post">
+                <label for="amount">Deposit Amount:</label>
+                <input type="number" id="amount" name="amount" required>
+                <button type="submit" id="deposit-button">Deposit</button>
+            </form>
+            <p class="balance">Current Balance: <%=balance%></p>
+            <button type="button" id="spin-button">SPIN </button>
+            <script>
+              $(document).ready(function() {
+                $('#spin-button').click(function() {
+                  // Send a POST request to the server to spin the reels
+                  $.ajax({
+                    type: 'POST',
+                    url: '/spin',
+                    success: function(response) {
+                      // Update symbols in the reels based on the response
+                      $('.reel').each(function(index) {
+                        $(this).text(response.reels[index]);
+                      });
+                    },
+                    error: function(error) {
+                      console.error('Error spinning reels:', error);
+                    }
+                  });
+                });
+              });
+            </script>
+            
+            
+        </div>
+        <a href="/logout" class="logout">Logout</a>
+        
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+        
+    </body>
+    </html> 
+
+ 
+
+    
