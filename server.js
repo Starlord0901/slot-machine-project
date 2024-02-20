@@ -112,41 +112,37 @@ app.post("/login", async (req, res) => {
   });
 });
 
-app.post('/spin', (req, res) => {
-  
-  const newReels = Array.from({ length: 3}, () => symbols[Math.floor(Math.random() * symbols.length)]);
-  console.log("entering this part of code")
-  async function spin() {
 
-   
-    for (const symbol of symbols) {
-        // Simulate querying for boxes
-        const symbols = { style: { transitionDuration: '1000ms' } }; // Simulate the boxes object
-        
-        // Determine the duration
-        const duration = determineDuration(boxes);
-        
-        // Simulate setting the transform property
-        console.log("Setting transform property for door:", door);
-        
-        // Simulate waiting for the specified duration
-        await delay(duration * 100);
-        
-    }
+async function spin() {
+  
+  for (const symbol of symbols) {
+    console.log('in symbols')
+    // Simulate querying for boxes
+    const reel = { style: { transitionDuration: '200ms' } }; 
+    const duration = parseInt(reel.style.transitionDuration); 
+    reel.style.transitionDuration='tranlateY(0)';
+    await new Promise((resolve)=>setTimeout(resolve,duration*100))
+    
+  }
 }
-  
 
-  const result = determineOutcome(newReels);
 
-  res.json({ reels: newReels, result });
+app.post('/spin', async (req, res) => {
+  console.log('in spin')
+  try {
+    await spin(); 
+    const newReels = Array.from({ length: 3 }, () => symbols[Math.floor(Math.random() * symbols.length)]);
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error processing spin' });
+  }
 });
-
-
 
 app.get('/index',(req,res)=>{
     if(req.session.user){
         console.log("app is rendering");
-        res.render('index');
+        res.render('index');  
     }else{
         console.log("error")
         req.flash('login first');
@@ -155,17 +151,10 @@ app.get('/index',(req,res)=>{
 });
 
 
-
-
-
-
 let balance=0;
-
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));    
-
-
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
@@ -274,19 +263,7 @@ async function handleDeposit() {
   }
 }
 
-  // app.post('/', async(req,res)=>{
-  //   try{
-  //       const userId=req.user._id;
-  //       const newReels=await spinReels();
-  //       const result=await determineOutcome(newReels);
-  //       await updateUserBalance(userId,result.amount);
-  //       res.render('/index',{reels:newReels,result:result,balance:balance});
-  //       console.log(userId)
-  //   }catch(error){
-  //       console.error(error);
-  //       res.status(500).json({ message: 'Error processing spin' });
-  //   }
-  // })
+
 
 
 
